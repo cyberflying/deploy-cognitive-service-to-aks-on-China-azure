@@ -135,8 +135,19 @@ spec:
 ```
 kubectl apply -f cs_tts.yml
 ```
-部署过程中，可以看到AKS根据Yaml文件去拉取TTS的image:
+部署过程中，可以使用 **kubectl describe pod** 看到AKS根据Yaml文件去拉取TTS的image:
 ![](/img/kubectl_container_pulling.png)
 
-成功运行后，可以使用kubectl查看相应的pod和service：
+成功部署后，可以使用**kubectl get pod|service**查看相应的pod和service：
 ![](/img/kubectl_container_running.png)
+
+## 测试TTS容器
+查看service时可以看到LB的外部IP和端口，这个即是TTS对外提供服务的地址，可以直接访问查看状态：
+![](/img/tts_api_web_page.png)
+查看具体的API：
+![](/img/kubectl_container_swagger.png)
+
+可以参考[TTS的repo](https://github.com/Azure-Samples/Cognitive-Speech-TTS)使用各种语音的调用REST API或SDK进行调用。
+下面是使用python的一个sample示例：
+![](/img/tts_python_sample.png)
+音频输出结果<iframe src=/sample-20200214-002616.mp3></iframe>
