@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tts
+  labels:
+    run: tts
+spec:
+  selector:
+    app: tts
+  type: LoadBalancer
+  ports:
+  - name: tts
+    port: 5000
+    targetPort: 5000
+    protocol: TCP
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: tts
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tts
+    spec:
+      containers:
+      - name: tts
+        image: containerpreview.azurecr.io/microsoft/cognitive-services-text-to-speech:1.3.0-amd64-zh-cn-kangkang-apollo-preview
+        ports:
+        - name: public-port
+          containerPort: 5000
+        resources:
+          requests:
+            memory: 4Gi
+            cpu: 1
+          limits:
+            memory: 6Gi
+            cpu: 2
+        livenessProbe:
+          httpGet:
+            path: /status
+            port: public-port
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+          periodSeconds: 10
+        args:
+            - "eula=accept"
+            - "apikey=<api key>" # Add API Key here
+            - "billing=https://eastus2.api.cognitive.microsoft.com/sts/v1.0/issuetoken" # Add billing key here
+      imagePullSecrets:
+        - name: tts-docker-secret # Add credentials for container preview registry here
+      automountServiceAccountToken: false
