@@ -150,4 +150,4 @@ kubectl apply -f cs_tts.yml
 可以参考[TTS的repo](https://github.com/Azure-Samples/Cognitive-Speech-TTS)使用各种语音的调用REST API或SDK进行调用。
 下面是使用python的一个sample示例：
 ![](/img/tts_python_sample.png)
-音频输出结果<iframe src=/sample-20200214-002616.mp3></iframe>
+音频输出结果<iframe rameborder="no" border="0" marginwidth="0" marginheight="0" src="/sample-20200214-002616.mp3"></iframe>
