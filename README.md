@@ -66,5 +66,77 @@ tag是latest的具有 en-US 区域设置和 en-US-JessaRUS 语音的容器映像
 可以看到TTS的容器目前是需要申请才能获得的，申请方式前文已提到。而对于registry是`mcr.microsoft.com/azure-cognitive-services`的容器，则已经都是公开的了，大家可以自行下载测试。
 
 
-## Create a secret based on existing Docker credentials
+## 部署TTS容器到AKS中
+### 创建AKS用于拉去容器的secret
+填写申请表格后，将会收到用于拉取容器的用户名和密码，在客户端使用下面的命令创建secret：
+```
 kubectl create secret docker-registry <secret-name> --docker-server=containerpreview.azurecr.io --docker-username=<username> --docker-password=<pwd>
+```
+
+### 准备部署使用的YAML文件
+使用Azure上创建的speech服务的Key和Endpoint替换Yaml文件相应的位置：
+```Yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: tts
+  labels:
+    run: tts
+spec:
+  selector:
+    app: tts
+  type: LoadBalancer
+  ports:
+  - name: tts
+    port: 5000
+    targetPort: 5000
+    protocol: TCP
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: tts
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tts
+    spec:
+      containers:
+      - name: tts
+        image: containerpreview.azurecr.io/microsoft/cognitive-services-text-to-speech:1.3.0-amd64-zh-cn-kangkang-apollo-preview
+        ports:
+        - name: public-port
+          containerPort: 5000
+        resources:
+          requests:
+            memory: 4Gi
+            cpu: 1
+          limits:
+            memory: 6Gi
+            cpu: 2
+        livenessProbe:
+          httpGet:
+            path: /status
+            port: public-port
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+          periodSeconds: 10
+        args:
+            - "eula=accept"
+            - "apikey=<api key>" # Add API Key here
+            - "billing=https://chinaeast2.api.cognitive.azure.cn/sts/v1.0/issuetoken" # Add billing key here
+      imagePullSecrets:
+        - name: tts-docker-secret # Add credentials for container preview registry here
+      automountServiceAccountToken: false
+```
+### 使用上一步骤中的Yaml文件进行部署
+```
+kubectl apply -f cs_tts.yml
+```
+部署过程中，可以看到AKS根据Yaml文件去拉取TTS的image:
+![](/img/kubectl_container_pulling.png)
+
+成功运行后，可以使用kubectl查看相应的pod和service：
+![](/img/kubectl_container_running.png)
