@@ -8,14 +8,14 @@
 
 ## 环境准备
 * [安装Azure CLI](https://docs.azure.cn/zh-cn/cli/install-azure-cli?view=azure-cli-latest)  
-Azure CLI既可以访问China Azure，也可以访问全球Azure。
+建议安装最新版本，本实例要求运行 Azure CLI 2.0.64 版或更高版本。Azure CLI既可以访问China Azure，也可以访问全球Azure。  
 访问China Azure需要设置：  
 ```
 az cloud set -n AzureChinaCloud
 ```
 访问全球Azure需要设置：  
 ```
-az cloud set -n Azureloud
+az cloud set -n AzureCloud
 ```
 * 安装kubectl  
 ```
@@ -31,7 +31,7 @@ az aks install-cli
 * 网络设置可以保持默认Basic。如果需要使用Virtual Nodes则必须使用Advanced网络选项![](/img/aks4.png)
 * 其他选项保持默认。创建成功后可查看overview页面![](/img/aks5.png)
 * 在insights页面可以看到相关组件的监控状态信息![](/img/aks6.png)
-* 创建的AKS集群，需要基础架构相关资源的支撑。比如，VM，存储，网络等等组件，Azure会在AKS cluster创建时将这些底层资源单独创建在另外一个资源组中，这个资源组的名称规则是MC_&lt;aks resource group name&gt;_&lt;aks name&gt;_&lt;aks location&gt;" ![](/img/aks7.png)
+* 创建的AKS集群，需要基础架构相关资源的支撑。比如，VM，存储，网络等等组件，Azure会在AKS cluster创建时将这些底层资源单独创建在另外一个资源组中，这个资源组的名称规则是`MC_<aks resource group name>_<aks name>_<aks location>` ![](/img/aks7.png)
 
 ## Get cognitive service container
 [Azure 认知服务中的容器](https://docs.microsoft.com/zh-cn/azure/cognitive-services/cognitive-services-container-support#containers-in-azure-cognitive-services)
