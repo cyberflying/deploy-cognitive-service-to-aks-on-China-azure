@@ -48,7 +48,7 @@ spec:
         args:
             - "eula=accept"
             - "apikey=<api key>" # Add API Key here
-            - "billing=https://eastus2.api.cognitive.microsoft.com/sts/v1.0/issuetoken" # Add billing key here
+            - "billing=https://chinaeast2.api.cognitive.azure.cn/sts/v1.0/issuetoken" # Add billing key here
       imagePullSecrets:
         - name: tts-docker-secret # Add credentials for container preview registry here
       automountServiceAccountToken: false
