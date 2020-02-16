@@ -67,7 +67,7 @@ tag是latest的具有 en-US 区域设置和 en-US-JessaRUS 语音的容器映像
 
 
 ## 部署TTS容器到AKS中
-### 创建AKS用于拉去容器的secret
+### 创建AKS用于拉取容器的secret
 填写申请表格后，将会收到用于拉取容器的用户名和密码，在客户端使用下面的命令创建secret：
 ```
 kubectl create secret docker-registry <secret-name> --docker-server=containerpreview.azurecr.io --docker-username=<username> --docker-password=<pwd>
@@ -147,7 +147,7 @@ kubectl apply -f cs_tts.yml
 查看具体的API：
 ![](/img/kubectl_container_swagger.png)
 
-可以参考[TTS的repo](https://github.com/Azure-Samples/Cognitive-Speech-TTS)使用各种语音的调用REST API或SDK进行调用。
+可以参考[TTS的repo](https://github.com/Azure-Samples/Cognitive-Speech-TTS)使用各种语言的调用REST API或SDK进行调用。
 下面是使用python的一个sample示例：
 ![](/img/tts_python_sample.png)
 
